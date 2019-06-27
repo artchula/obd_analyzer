@@ -10,11 +10,15 @@ can0 = can.interface.Bus(channel = 'can0', bustype = 'socketcan_ctypes')# socket
 
 #msg = can.Message(arbitration_id=0x123, data=[0, 1, 2, 3, 4, 5, 6, 7], extended_id=False)
 
+f = open("../data/dev1/test.txt", "a")
+
 msg = True
 while msg is not None:
     msg = can0.recv(10.0)
-    print msg
+    f.write("%s\n" % msg)
+    print(msg)
 else:
+    f.close()
     print('Timeout occurred, no message.')
 
 os.system('sudo ifconfig can0 down')
