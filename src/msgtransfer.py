@@ -18,7 +18,7 @@ can0 = can.interface.Bus(channel = 'can0', bustype = 'socketcan_ctypes')# socket
 f = open("/home/pi/Documents/obd_analyzer/data/dev1/can_msg_storage.txt", "w")
 
 # Create file object
-wb = load_workbook("/home/pi/Documents/obd_analyzer/data/dev1/can_msg_template.xlsx")
+wb = load_workbook("/home/pi/Documents/obd_analyzer/data/can_msg_template.xlsx")
 
 # Grab the active worksheet
 ws = wb.active
@@ -34,17 +34,17 @@ while msg is not None:
 
     if msg is not None:
         ws["A%d" % i].value = i - 1
-        ws["B%d" % i].value = datetime.datetime.fromtimestamp(msg.timestamp)
-        ws["C%d" % i].value = msg.arbitration_id
+        ws["B%d" % i].value = "%s" % datetime.datetime.fromtimestamp(msg.timestamp)
+        ws["C%d" % i].value = "0x%X" % msg.arbitration_id
         ws["D%d" % i].value = msg.is_extended_id
-        ws["E%d" % i].value = msg.data[0]
-        ws["F%d" % i].value = msg.data[1] 
-        ws["G%d" % i].value = msg.data[2]
-        ws["H%d" % i].value = msg.data[3]
-        ws["I%d" % i].value = msg.data[4]
-        ws["J%d" % i].value = msg.data[5]
-        ws["K%d" % i].value = msg.data[6]
-        ws["L%d" % i].value = msg.data[7]
+        ws["E%d" % i].value = "%X" % msg.data[0]
+        ws["F%d" % i].value = "%X" % msg.data[1] 
+        ws["G%d" % i].value = "%X" % msg.data[2]
+        ws["H%d" % i].value = "%X" % msg.data[3]
+        ws["I%d" % i].value = "%X" % msg.data[4]
+        ws["J%d" % i].value = "%X" % msg.data[5]
+        ws["K%d" % i].value = "%X" % msg.data[6]
+        ws["L%d" % i].value = "%X" % msg.data[7]
         i += 1
     
 #    print(msg)
