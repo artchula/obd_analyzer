@@ -33,7 +33,16 @@ scan_ssid=1
 2. 开启 SSH
 同样在 boot 分区新建一个文件，空白的即可，文件命名为 ssh，注意要小写且不要有任何扩展名
 
-3. 树莓派系统：raspbian，默认的用户名：pi，默认密码：raspberry
+3. 树莓派系统：raspbian
+默认的用户名：pi
+默认密码：raspberry
+
+4. 修改时区
+配置
+sudo raspi-config 进入配置界面
+Localisation Options 》Change Timezone 》Asia 》Shanghai 》Finish
+测试
+输入 date，查看当前时间是否正确
 
 二、基础配置
 1. 修改密码
