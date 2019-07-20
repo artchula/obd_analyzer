@@ -15,7 +15,7 @@ def printdb2csv(indb, date):
     conn = sqlite3.connect(indb)
     try:
         # Create cursor
-        c = conn.cursor()
+        cursor = conn.cursor()
 
         # Create folder
         isExists = os.path.exists(msg_path)
@@ -29,20 +29,24 @@ def printdb2csv(indb, date):
         tt_stop = timestamp + 60 * 60 * 24
 
         # Print msg to csv
-        cursor = c.execute('SELECT ts, arbitration_id, data, extended FROM messages WHERE ts >= ? AND ts < ?', (tt_start, tt_stop))
-        with open(msg_path + date +'.csv', 'w', newline='') as f:
-            writer = csv.writer(f)
-            for row in cursor:
-                str_tmp = [(row[0] - tt_start) / 3600] \
-                        + [hex(row[1])] \
-                        + ['*' + row[2].hex()] \
-                        + [row[3]] 
-                writer.writerow(str_tmp)
+        csvfile = open(msg_path + date +'.csv', 'w', newline='')
+        writer = csv.writer(csvfile)
+        cursor.execute('SELECT ts, arbitration_id, data, extended FROM messages WHERE ts >= ? AND ts < ?', (tt_start, tt_stop)) 
+        for row in cursor.fetchall():
+            str_tmp = [(row[0] - tt_start) / 3600] \
+                    + [hex(row[1])] \
+                    + ['*' + row[2].hex()] \
+                    + [row[3]] 
+            writer.writerow(str_tmp)
 
     except Exception as e:
         print('Failed to print data:', e)
 
     finally:
+        # Close csv file
+        csvfile.close()
+        # Close the cursor
+        cursor.close()
         # Close the db file
         conn.close()
 
