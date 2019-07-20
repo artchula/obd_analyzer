@@ -19,7 +19,7 @@ bus = can.interface.Bus(channel='can0', bustype='socketcan')
 notifier = can.Notifier(bus, [can.Logger(db_path)])
 
 while True:
-    time.sleep(600)
+    time.sleep(3600)
 
     ts = time.strftime('%Y%m%d', time.localtime())
     canapp.printdb2csv(db_path, ts)
