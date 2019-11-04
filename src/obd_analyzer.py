@@ -3,7 +3,8 @@
 import os
 import time
 import can
-import canapp
+#import canapp
+import RPi.GPIO as GPIO
 
 db_path = '/home/pi/obd_analyzer/data/storage.db'
 
@@ -18,13 +19,27 @@ bus = can.interface.Bus(channel='can0', bustype='socketcan')
 # Create notifier object
 notifier = can.Notifier(bus, [can.Logger(db_path)])
 
-while True:
-    time.sleep(3600)
+# Set GPIO21 as output
+GPIO.setmode(GPIO.BCM)
+runled = 21
+GPIO.setup(runled, GPIO.OUT)
 
-    ts = time.strftime('%Y%m%d', time.localtime())
-    canapp.printdb2csv(db_path, ts)
+
+print("Obd analyzer start!")
+while True:
+    GPIO.output(runled, GPIO.HIGH)
+    time.sleep(1)
+    GPIO.output(runled, GPIO.LOW)
+    time.sleep(1)
+    
+
+#    ts = time.strftime('%Y%m%d', time.localtime())
+#    canapp.printdb2csv(db_path, ts)
 
 #print('Timeout occurred, no message.')
+
+# Free GPIO
+GPIO.cleanup()
 
 # To remove the network interface
 os.system('sudo ip link del can0')
